@@ -11,7 +11,6 @@ export default NextAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       authorization: { params: { scope: "read:user user:email repo" } },
       profile(profile) {
-        console.log("here");
         return {
           id: profile.id.toString(),
           githubId: profile.id.toString(),
@@ -23,17 +22,11 @@ export default NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      session.userId = user.id;
+      return session;
+    },
+  },
   secret: process.env.SECRET as string,
 });
-
-/*
-const accounts = await prisma.user.findUnique({
-  where: {
-    id: user.id,
-  },
-  select: {
-    accounts: true,
-  },
-});
-const accessToken = accounts?.accounts[0]?.access_token;
-*/

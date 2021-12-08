@@ -1,4 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import NotSignedIn from "../components/NotSignedIn";
 
 export default function Component() {
   const { data: session } = useSession();
@@ -10,10 +11,5 @@ export default function Component() {
       </>
     );
   }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn("github")}>Sign in</button>
-    </>
-  );
+  return <NotSignedIn />;
 }
