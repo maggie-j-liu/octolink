@@ -37,7 +37,6 @@ export default async function handler(
       },
     }
   );
-
   let last = page;
   const linkHeaders = parseLinkHeader(result.headers.get("Link"));
   // has more pages

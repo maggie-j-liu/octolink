@@ -23,6 +23,25 @@ export default NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      try {
+        await prisma.account.update({
+          where: {
+            provider_providerAccountId: {
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+            },
+          },
+          data: {
+            access_token: account.access_token,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      return true;
+    },
     async session({ session, user }) {
       session.userId = user.id;
       return session;
