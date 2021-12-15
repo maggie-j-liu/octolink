@@ -7,8 +7,12 @@ interface Repo {
   id: number;
   full_name: string;
 }
-interface Links {
-  [key: string]: { repo: string; id: string }[];
+interface Link {
+  repo: string;
+  id: string;
+}
+interface RepoLinks {
+  [key: string]: Link[];
 }
 const Dashboard = () => {
   const { status } = useSession();
@@ -16,7 +20,7 @@ const Dashboard = () => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-  const [links, setLinks] = useState<Links>({});
+  const [links, setLinks] = useState<RepoLinks>({});
   const createLink = async (repo: string) => {
     const created = await fetch("/api/links/add", {
       method: "POST",
@@ -35,23 +39,21 @@ const Dashboard = () => {
   useEffect(() => {
     if (status === "authenticated") {
       (async () => {
-        const [repos, links]: [
-          { repos: Repo[]; last: number },
-          { repo: string; id: string }[]
-        ] = await Promise.all([
-          fetch("/api/github/get-repos", {
-            method: "POST",
-            body: JSON.stringify({
-              page,
-            }),
-          }).then((res) => res.json()),
-          fetch("/api/links/get", {
-            method: "POST",
-          }).then((res) => res.json()),
-        ]);
+        const [repos, links]: [{ repos: Repo[]; last: number }, Link[]] =
+          await Promise.all([
+            fetch("/api/github/get-repos", {
+              method: "POST",
+              body: JSON.stringify({
+                page,
+              }),
+            }).then((res) => res.json()),
+            fetch("/api/links/get", {
+              method: "POST",
+            }).then((res) => res.json()),
+          ]);
         setRepos(repos.repos);
         setLastPage(repos.last);
-        const linkMap: Links = {};
+        const linkMap: RepoLinks = {};
         for (const link of links) {
           if (linkMap[link.repo]) {
             linkMap[link.repo].push(link);

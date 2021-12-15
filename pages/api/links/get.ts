@@ -15,8 +15,13 @@ export default async function handler(
     res.status(401).json({ error: "Not authenticated" });
     return;
   }
+  let id = undefined;
+  if (req.body) {
+    id = JSON.parse(req.body).id;
+  }
   const links = await prisma.link.findMany({
     where: {
+      id,
       userId: session.userId as string,
     },
   });
