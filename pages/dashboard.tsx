@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import NotSignedIn from "../components/NotSignedIn";
 import { useState } from "react";
 import LoadingSkeleton from "../components/LoadingSkeleton";
+import Link from "next/link";
 interface Repo {
   id: number;
   full_name: string;
@@ -94,9 +95,9 @@ const Dashboard = () => {
                     <div className="space-y-4">
                       {links[repo.full_name].map((link) => (
                         <div key={link.id} className="flex items-center">
-                          <a href={link.id} className="text-blue-500">
-                            {link.id}
-                          </a>
+                          <Link href={`/share/${link.id}`}>
+                            <a className="text-blue-500">{link.id}</a>
+                          </Link>
                         </div>
                       ))}
                     </div>
