@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import accessToken from "../../../lib/accessToken";
 import createUrl from "../../../lib/createUrl";
-import prisma from "../../../lib/prisma";
 import parseLinkHeader from "parse-link-header";
 
 export default async function handler(

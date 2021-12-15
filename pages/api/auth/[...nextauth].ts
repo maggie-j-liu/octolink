@@ -23,7 +23,8 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ account }) {
+      // update access_token when user signs in
       try {
         await prisma.account.update({
           where: {
@@ -39,7 +40,6 @@ export default NextAuth({
       } catch (error) {
         console.log(error);
       }
-
       return true;
     },
     async session({ session, user }) {

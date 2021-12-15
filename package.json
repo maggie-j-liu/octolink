@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pscale:dev": "pscale connect octolink dev --port 3309",
+    "pscale:shadow": "pscale connect octolink dev --port 3310"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^0.5.2-next.19",

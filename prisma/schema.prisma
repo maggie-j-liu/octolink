@@ -28,8 +28,7 @@ model Account {
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -52,6 +51,7 @@ model User {
   image          String?
   accounts       Account[]
   sessions       Session[]
+  links          Link[]
 }
 
 model VerificationToken {
@@ -60,4 +60,11 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Link {
+  id     String @id @default(cuid())
+  userId String
+  repo   String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

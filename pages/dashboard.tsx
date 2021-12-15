@@ -7,23 +7,59 @@ interface Repo {
   id: number;
   full_name: string;
 }
+interface Links {
+  [key: string]: { repo: string; id: string }[];
+}
 const Dashboard = () => {
   const { status } = useSession();
   const [loading, setLoading] = useState(true);
   const [repos, setRepos] = useState<Repo[]>([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
+  const [links, setLinks] = useState<Links>({});
+  const createLink = async (repo: string) => {
+    const created = await fetch("/api/links/add", {
+      method: "POST",
+      body: JSON.stringify({
+        repo,
+      }),
+    }).then((res) => res.json());
+    const prev = JSON.parse(JSON.stringify(links));
+    if (prev[repo]) {
+      prev[repo].push(created);
+    } else {
+      prev[repo] = [created];
+    }
+    setLinks(prev);
+  };
   useEffect(() => {
     if (status === "authenticated") {
       (async () => {
-        const data = await fetch("/api/github/get-repos", {
-          method: "POST",
-          body: JSON.stringify({
-            page,
-          }),
-        }).then((res) => res.json());
-        setRepos(data.repos);
-        setLastPage(data.last);
+        const [repos, links]: [
+          { repos: Repo[]; last: number },
+          { repo: string; id: string }[]
+        ] = await Promise.all([
+          fetch("/api/github/get-repos", {
+            method: "POST",
+            body: JSON.stringify({
+              page,
+            }),
+          }).then((res) => res.json()),
+          fetch("/api/links/get", {
+            method: "POST",
+          }).then((res) => res.json()),
+        ]);
+        setRepos(repos.repos);
+        setLastPage(repos.last);
+        const linkMap: Links = {};
+        for (const link of links) {
+          if (linkMap[link.repo]) {
+            linkMap[link.repo].push(link);
+          } else {
+            linkMap[link.repo] = [link];
+          }
+        }
+        setLinks(linkMap);
         setLoading(false);
       })();
     }
@@ -52,6 +88,23 @@ const Dashboard = () => {
               {repos.map((repo) => (
                 <div key={repo.id} className="py-8 text-lg">
                   <h2>{repo.full_name}</h2>
+                  {links[repo.full_name] && (
+                    <div className="space-y-4">
+                      {links[repo.full_name].map((link) => (
+                        <div key={link.id} className="flex items-center">
+                          <a href={link.id} className="text-blue-500">
+                            {link.id}
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    className="btn"
+                    onClick={() => createLink(repo.full_name)}
+                  >
+                    Create Link
+                  </button>
                 </div>
               ))}
             </div>
