@@ -5,23 +5,30 @@ import NotSignedIn from "../../components/NotSignedIn";
 import prisma from "../../lib/prisma";
 
 const LinkPage = ({ repo, id }: { repo: string; id: string }) => {
-  const { data: session, status } = useSession();
-  const [invite, setInvite] = useState("not sent");
+  const { status } = useSession();
+  const [loading, setLoading] = useState(false);
   const sendInvite = async () => {
-    setInvite("sending");
-    await fetch("/api/github/send-invite", {
+    setLoading(true);
+    const res = await fetch("/api/github/send-invite", {
       method: "POST",
       body: JSON.stringify({
         id,
       }),
     });
-    setInvite("sent");
+    if (res.status >= 300) {
+      const { error } = await res.json();
+      alert("Error: " + error);
+      setLoading(false);
+      return;
+    }
+    window.location.href = `https://github.com/${repo}`;
+    setLoading(false);
   };
   if (status === "unauthenticated") {
     return <NotSignedIn />;
   }
   return (
-    <main className="px-8 py-16 min-h-screen flex flex-col items-center justify-center">
+    <main className="px-8 py-16 min-h-screen flex flex-col items-center justify-center gap-6">
       <h1 className="text-4xl">
         You have been invited to{" "}
         <a
@@ -31,26 +38,12 @@ const LinkPage = ({ repo, id }: { repo: string; id: string }) => {
           {repo}
         </a>
       </h1>
-      <p>
-        If you accept this invitation, you'll receive an invitation on GitHub,
-        which you can accept{" "}
-        <a
-          href={`https://github.com/${repo}/invitations`}
-          className="hover:underline text-blue-600 font-bold"
-        >
-          here
-        </a>
-      </p>
       <button
-        className="btn"
-        disabled={invite === "sending" || invite === "sent"}
+        className="text-lg btn"
+        disabled={loading}
         onClick={() => sendInvite()}
       >
-        {invite === "not sent"
-          ? "Send Invite"
-          : invite === "sending"
-          ? "Sending"
-          : "Sent!"}
+        {loading ? "Accepting..." : "Accept Invite"}
       </button>
     </main>
   );

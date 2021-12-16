@@ -48,16 +48,31 @@ export default async function handler(
       headers: {
         Authorization: `token ${token}`,
         accept: "application/vnd.github.v3+json",
+        "Content-Length": "0",
       },
     }
   );
 
-  console.log(result.status);
-  const json = await result.json();
-  const invitationId = json.id;
+  // console.log(result.status);
 
+  // already collaborator
+  if (result.status === 204) {
+    res.status(204).end();
+    return;
+  }
+
+  const json = await result.json();
+
+  // an error
+  if (result.status !== 201) {
+    res.status(400).json({ error: json.message });
+    return;
+  }
+
+  const invitationId = json.id;
   const userToken = await accessToken(session?.userId as string);
 
+  // accept the invitation
   const inviteResult = await fetch(
     `https://api.github.com/user/repository_invitations/${invitationId}`,
     {
