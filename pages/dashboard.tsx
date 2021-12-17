@@ -3,14 +3,18 @@ import { useEffect } from "react";
 import NotSignedIn from "../components/NotSignedIn";
 import { useState } from "react";
 import LoadingSkeleton from "../components/LoadingSkeleton";
-import Link from "next/link";
+import ShareLink from "../components/ShareLink";
+
 interface Repo {
   id: number;
   full_name: string;
 }
-interface Link {
+export interface Link {
   repo: string;
   id: string;
+  _count: {
+    uses: number;
+  };
 }
 interface RepoLinks {
   [key: string]: Link[];
@@ -92,14 +96,13 @@ const Dashboard = () => {
                 <div key={repo.id} className="py-8 text-lg">
                   <h2>{repo.full_name}</h2>
                   {links[repo.full_name] && (
-                    <div className="space-y-4">
-                      {links[repo.full_name].map((link) => (
-                        <div key={link.id} className="flex items-center">
-                          <Link href={`/share/${link.id}`}>
-                            <a className="text-blue-500">{link.id}</a>
-                          </Link>
-                        </div>
-                      ))}
+                    <div className="my-3">
+                      <h3 className="text-xl">Share Links</h3>
+                      <ul className="space-y-4">
+                        {links[repo.full_name].map((link) => (
+                          <ShareLink link={link} />
+                        ))}
+                      </ul>
                     </div>
                   )}
                   <button

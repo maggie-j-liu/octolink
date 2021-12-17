@@ -52,6 +52,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   links          Link[]
+  uses           Use[]
 }
 
 model VerificationToken {
@@ -67,4 +68,13 @@ model Link {
   userId String
   repo   String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uses   Use[]
+}
+
+model Use {
+  id     String @id @default(cuid())
+  userId String
+  linkId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link   Link   @relation(fields: [linkId], references: [id], onDelete: Cascade)
 }

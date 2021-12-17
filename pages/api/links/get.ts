@@ -24,6 +24,13 @@ export default async function handler(
       id,
       userId: session.userId as string,
     },
+    include: {
+      _count: {
+        select: {
+          uses: true,
+        },
+      },
+    },
   });
   res.status(200).json(links);
 }

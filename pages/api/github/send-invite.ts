@@ -73,7 +73,7 @@ export default async function handler(
   const userToken = await accessToken(session?.userId as string);
 
   // accept the invitation
-  const inviteResult = await fetch(
+  const invitePromise = fetch(
     `https://api.github.com/user/repository_invitations/${invitationId}`,
     {
       method: "PATCH",
@@ -83,6 +83,17 @@ export default async function handler(
       },
     }
   );
+
+  // add this use to the db
+  const dbPromise = await prisma.use.create({
+    data: {
+      userId: session?.userId as string,
+      linkId: id,
+    },
+  });
+
+  const [inviteResult] = await Promise.all([invitePromise, dbPromise]);
+
   console.log(inviteResult.status);
 
   res.status(200).end();

@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "pscale:dev": "pscale connect octolink dev --port 3309",
-    "pscale:shadow": "pscale connect octolink dev --port 3310",
+    "pscale:shadow": "pscale connect octolink shadow --port 3310",
     "pscale:dr": "pscale deploy-request create octolink dev"
   },
   "dependencies": {
