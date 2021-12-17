@@ -3,9 +3,9 @@ import { useEffect } from "react";
 import NotSignedIn from "../components/NotSignedIn";
 import { useState } from "react";
 import LoadingSkeleton from "../components/LoadingSkeleton";
-import ShareLink from "../components/ShareLink";
+import Repo from "../components/Repo";
 
-interface Repo {
+export interface RepoType {
   id: number;
   full_name: string;
 }
@@ -16,13 +16,13 @@ export interface Link {
     uses: number;
   };
 }
-interface RepoLinks {
+export interface RepoLinks {
   [key: string]: Link[];
 }
 const Dashboard = () => {
   const { status } = useSession();
   const [loading, setLoading] = useState(true);
-  const [repos, setRepos] = useState<Repo[]>([]);
+  const [repos, setRepos] = useState<RepoType[]>([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [links, setLinks] = useState<RepoLinks>({});
@@ -44,7 +44,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (status === "authenticated") {
       (async () => {
-        const [repos, links]: [{ repos: Repo[]; last: number }, Link[]] =
+        const [repos, links]: [{ repos: RepoType[]; last: number }, Link[]] =
           await Promise.all([
             fetch("/api/github/get-repos", {
               method: "POST",
@@ -93,25 +93,12 @@ const Dashboard = () => {
           {!loading && (
             <div className="divide-y-2 border-y-2">
               {repos.map((repo) => (
-                <div key={repo.id} className="py-8 text-lg">
-                  <h2>{repo.full_name}</h2>
-                  {links[repo.full_name] && (
-                    <div className="my-3">
-                      <h3 className="text-xl">Share Links</h3>
-                      <ul className="space-y-4">
-                        {links[repo.full_name].map((link) => (
-                          <ShareLink link={link} />
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  <button
-                    className="btn"
-                    onClick={() => createLink(repo.full_name)}
-                  >
-                    Create Link
-                  </button>
-                </div>
+                <Repo
+                  key={repo.id}
+                  repo={repo}
+                  links={links}
+                  createLink={createLink}
+                />
               ))}
             </div>
           )}

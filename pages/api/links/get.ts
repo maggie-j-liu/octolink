@@ -19,18 +19,39 @@ export default async function handler(
   if (req.body) {
     id = JSON.parse(req.body).id;
   }
-  const links = await prisma.link.findMany({
-    where: {
-      id,
-      userId: session.userId as string,
-    },
-    include: {
-      _count: {
-        select: {
-          uses: true,
+  let links;
+  if (id) {
+    // get only the uses
+    links = await prisma.link.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        uses: {
+          select: {
+            user: {
+              select: {
+                githubUsername: true,
+              },
+            },
+          },
         },
       },
-    },
-  });
+    });
+    console.log(links);
+  } else {
+    links = await prisma.link.findMany({
+      where: {
+        userId: session.userId as string,
+      },
+      include: {
+        _count: {
+          select: {
+            uses: true,
+          },
+        },
+      },
+    });
+  }
   res.status(200).json(links);
 }
