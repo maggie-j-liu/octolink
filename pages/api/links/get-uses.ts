@@ -16,25 +16,27 @@ export default async function handler(
     return;
   }
   const body = JSON.parse(req.body);
-  if (!body?.repos) {
-    res.status(400).json({ error: "Missing repos" });
+  if (!body?.id) {
+    res.status(400).json({ error: "Missing id" });
     return;
   }
-  const links = await prisma.link.findMany({
+  // get only the uses
+  const links = await prisma.link.findUnique({
     where: {
-      userId: session.userId as string,
-      repo: {
-        in: body.repos,
-      },
+      id: body.id,
     },
-    include: {
-      _count: {
+    select: {
+      uses: {
         select: {
-          uses: true,
+          user: {
+            select: {
+              githubUsername: true,
+            },
+          },
         },
       },
     },
   });
-  // console.log("get", links);
+  // console.log("get-uses", links);
   res.status(200).json(links);
 }

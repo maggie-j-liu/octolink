@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Link as LinkType } from "../pages/dashboard";
 const ShareLink = ({ link }: { link: LinkType }) => {
   const getUses = async () => {
-    const res = await fetch("/api/links/get", {
+    const res = await fetch("/api/links/get-uses", {
       method: "POST",
       body: JSON.stringify({
         id: link.id,

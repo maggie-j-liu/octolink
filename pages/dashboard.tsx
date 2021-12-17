@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [repos, setRepos] = useState<RepoType[]>([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-  const [links, setLinks] = useState<RepoLinks>({});
+  const [links, setLinks] = useState<{ [key: number]: RepoLinks }>({});
   const createLink = async (repo: string) => {
     const created = await fetch("/api/links/add", {
       method: "POST",
@@ -34,39 +34,47 @@ const Dashboard = () => {
       }),
     }).then((res) => res.json());
     const prev = JSON.parse(JSON.stringify(links));
-    if (prev[repo]) {
-      prev[repo].push(created);
+    if (prev[page][repo]) {
+      prev[page][repo].push(created);
     } else {
-      prev[repo] = [created];
+      prev[page][repo] = [created];
     }
     setLinks(prev);
   };
   useEffect(() => {
+    console.log("page", page);
     if (status === "authenticated") {
       (async () => {
-        const [repos, links]: [{ repos: RepoType[]; last: number }, Link[]] =
-          await Promise.all([
-            fetch("/api/github/get-repos", {
-              method: "POST",
-              body: JSON.stringify({
-                page,
-              }),
-            }).then((res) => res.json()),
-            fetch("/api/links/get", {
-              method: "POST",
-            }).then((res) => res.json()),
-          ]);
+        const repos: { repos: RepoType[]; last: number } = await fetch(
+          "/api/github/get-repos",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              page,
+            }),
+          }
+        ).then((res) => res.json());
         setRepos(repos.repos);
         setLastPage(repos.last);
-        const linkMap: RepoLinks = {};
-        for (const link of links) {
-          if (linkMap[link.repo]) {
-            linkMap[link.repo].push(link);
-          } else {
-            linkMap[link.repo] = [link];
+        if (!links[page]) {
+          const repoNames = repos.repos.map((repo) => repo.full_name);
+          const newLinks = await fetch("/api/links/get", {
+            method: "POST",
+            body: JSON.stringify({
+              repos: repoNames,
+            }),
+          }).then((res) => res.json());
+          const linkMap: RepoLinks = {};
+          for (const link of newLinks) {
+            if (linkMap[link.repo]) {
+              linkMap[link.repo].push(link);
+            } else {
+              linkMap[link.repo] = [link];
+            }
           }
+          setLinks((prev) => ({ ...prev, [page]: linkMap }));
         }
-        setLinks(linkMap);
+
         setLoading(false);
       })();
     }
@@ -96,7 +104,7 @@ const Dashboard = () => {
                 <Repo
                   key={repo.id}
                   repo={repo}
-                  links={links}
+                  links={links[page]}
                   createLink={createLink}
                 />
               ))}
