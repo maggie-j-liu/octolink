@@ -42,7 +42,6 @@ export default async function handler(
   if (linkHeaders && linkHeaders.last) {
     last = parseInt(linkHeaders.last.page);
   }
-
   const repos = await result.json();
   res.status(200).json({
     repos,

@@ -16,15 +16,15 @@ export default async function handler(
     return;
   }
   const body = JSON.parse(req.body);
-  if (!body?.repos) {
-    res.status(400).json({ error: "Missing repos" });
+  if (!body?.repoIds) {
+    res.status(400).json({ error: "Missing repoIds" });
     return;
   }
   const links = await prisma.link.findMany({
     where: {
       userId: session.userId as string,
-      repo: {
-        in: body.repos,
+      repoId: {
+        in: body.repoIds,
       },
     },
     include: {

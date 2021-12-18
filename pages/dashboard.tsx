@@ -4,13 +4,15 @@ import NotSignedIn from "../components/NotSignedIn";
 import { useState } from "react";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import Repo from "../components/Repo";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 export interface RepoType {
   id: number;
   full_name: string;
 }
 export interface Link {
-  repo: string;
+  repoId: number;
   id: string;
   _count: {
     uses: number;
@@ -19,30 +21,31 @@ export interface Link {
 export interface RepoLinks {
   [key: string]: Link[];
 }
-const Dashboard = () => {
+const Dashboard = ({ page: initialPage }: { page: number }) => {
   const { status } = useSession();
   const [loading, setLoading] = useState(true);
   const [repos, setRepos] = useState<RepoType[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(initialPage);
   const [lastPage, setLastPage] = useState(1);
-  const [links, setLinks] = useState<{ [key: number]: RepoLinks }>({});
-  const createLink = async (repo: string) => {
+  const [links, setLinks] = useState<RepoLinks>({});
+  const router = useRouter();
+  const createLink = async (repoName: string, repoId: number) => {
     const created = await fetch("/api/links/add", {
       method: "POST",
       body: JSON.stringify({
-        repo,
+        repoName,
+        repoId,
       }),
     }).then((res) => res.json());
-    const prev = JSON.parse(JSON.stringify(links));
-    if (prev[page][repo]) {
-      prev[page][repo].push(created);
+    const prev: typeof links = JSON.parse(JSON.stringify(links));
+    if (prev[repoId]) {
+      prev[repoId].push(created);
     } else {
-      prev[page][repo] = [created];
+      prev[repoId] = [created];
     }
     setLinks(prev);
   };
   useEffect(() => {
-    console.log("page", page);
     if (status === "authenticated") {
       (async () => {
         const repos: { repos: RepoType[]; last: number } = await fetch(
@@ -54,25 +57,37 @@ const Dashboard = () => {
             }),
           }
         ).then((res) => res.json());
+        if (!repos.repos.length && page !== 1) {
+          setPage(1);
+          router.replace(`/dashboard`);
+          return;
+        }
         setRepos(repos.repos);
         setLastPage(repos.last);
-        if (!links[page]) {
-          const repoNames = repos.repos.map((repo) => repo.full_name);
+        const needToGet: number[] = [];
+        for (const repo of repos.repos) {
+          if (!links[repo.id]) {
+            needToGet.push(repo.id);
+          }
+        }
+        if (needToGet.length) {
           const newLinks = await fetch("/api/links/get", {
             method: "POST",
             body: JSON.stringify({
-              repos: repoNames,
+              repoIds: needToGet,
             }),
           }).then((res) => res.json());
           const linkMap: RepoLinks = {};
           for (const link of newLinks) {
-            if (linkMap[link.repo]) {
-              linkMap[link.repo].push(link);
+            if (linkMap[link.repoId]) {
+              linkMap[link.repoId].push(link);
             } else {
-              linkMap[link.repo] = [link];
+              linkMap[link.repoId] = [link];
             }
           }
-          setLinks((prev) => ({ ...prev, [page]: linkMap }));
+          console.log("links", links);
+          console.log("linkmap", linkMap);
+          setLinks((prev) => ({ ...prev, ...linkMap }));
         }
 
         setLoading(false);
@@ -104,7 +119,7 @@ const Dashboard = () => {
                 <Repo
                   key={repo.id}
                   repo={repo}
-                  links={links[page]}
+                  links={links}
                   createLink={createLink}
                 />
               ))}
@@ -150,3 +165,17 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (query?.page) {
+    const page = Number(query.page);
+    if (!isNaN(page) && page > 0) {
+      return { props: { page } };
+    }
+  }
+  return {
+    props: {
+      page: 1,
+    },
+  };
+};

@@ -16,15 +16,18 @@ export default async function handler(
     res.status(401).json({ error: "Not authenticated" });
     return;
   }
-  const { repo }: { repo: string } = JSON.parse(req.body);
-  if (!repo) {
-    res.status(400).json({ error: "missing repo" });
+  const { repoId, repoName }: { repoId: number; repoName: string } = JSON.parse(
+    req.body
+  );
+  if (!repoId) {
+    res.status(400).json({ error: "missing repoId" });
     return;
   }
   const link = await prisma.link.create({
     data: {
       userId: session.userId as string,
-      repo,
+      repoId,
+      repoName,
     },
   });
   const withCount: Link & { _count: { uses: number } } = {

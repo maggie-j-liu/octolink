@@ -4,7 +4,7 @@ import { useState } from "react";
 import NotSignedIn from "../../components/NotSignedIn";
 import prisma from "../../lib/prisma";
 
-const LinkPage = ({ repo, id }: { repo: string; id: string }) => {
+const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
   const { status } = useSession();
   const [loading, setLoading] = useState(false);
   const sendInvite = async () => {
@@ -21,7 +21,7 @@ const LinkPage = ({ repo, id }: { repo: string; id: string }) => {
       setLoading(false);
       return;
     }
-    window.location.href = `https://github.com/${repo}`;
+    window.location.href = `https://github.com/${repoName}`;
     setLoading(false);
   };
   if (status === "unauthenticated") {
@@ -32,10 +32,10 @@ const LinkPage = ({ repo, id }: { repo: string; id: string }) => {
       <h1 className="text-4xl">
         You have been invited to{" "}
         <a
-          href={`https://github.com/${repo}`}
+          href={`https://github.com/${repoName}`}
           className="hover:underline text-blue-600 font-bold"
         >
-          {repo}
+          {repoName}
         </a>
       </h1>
       <button
@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       id: params.id as string,
     },
     select: {
-      repo: true,
+      repoName: true,
     },
   });
   if (!link) {
@@ -82,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
   return {
     props: {
-      repo: link.repo,
+      repoName: link.repoName,
       session,
       id: params.id as string,
     },

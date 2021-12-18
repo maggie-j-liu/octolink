@@ -26,7 +26,7 @@ export default async function handler(
       id,
     },
     select: {
-      repo: true,
+      repoId: true,
       user: {
         include: {
           accounts: true,
@@ -40,7 +40,7 @@ export default async function handler(
   }
   const token = link?.user.accounts[0].access_token;
   const result = await fetch(
-    `https://api.github.com/repos/${link.repo}/collaborators/${
+    `https://api.github.com/repositories/${link.repoId}/collaborators/${
       session?.githubUsername as string
     }`,
     {
@@ -94,7 +94,7 @@ export default async function handler(
 
   const [inviteResult] = await Promise.all([invitePromise, dbPromise]);
 
-  console.log(inviteResult.status);
+  // console.log(inviteResult.status);
 
   res.status(200).end();
 }
