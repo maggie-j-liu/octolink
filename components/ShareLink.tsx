@@ -1,15 +1,7 @@
 import Link from "next/link";
 import { Link as LinkType } from "../pages/dashboard";
+import ShareLinkModal from "./ShareLinkModal";
 const ShareLink = ({ link }: { link: LinkType }) => {
-  const getUses = async () => {
-    const res = await fetch("/api/links/get-uses", {
-      method: "POST",
-      body: JSON.stringify({
-        id: link.id,
-      }),
-    });
-    console.log(await res.json());
-  };
   return (
     <li className="flex items-center justify-between gap-4">
       <Link href={`/share/${link.id}`}>
@@ -18,6 +10,7 @@ const ShareLink = ({ link }: { link: LinkType }) => {
         </a>
       </Link>
       <div>Uses: {link._count.uses}</div>
+      <ShareLinkModal link={link} />
     </li>
   );
 };
