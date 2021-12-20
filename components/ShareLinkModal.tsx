@@ -1,6 +1,9 @@
 import { Transition, Dialog } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { Link as LinkType } from "../pages/dashboard";
+import Image from "next/image";
+import { FiCheck, FiCopy, FiX } from "react-icons/fi";
+import CopyButton from "./CopyButton";
 
 interface Use {
   user: {
@@ -54,7 +57,7 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0" />
+              <Dialog.Overlay className="fixed inset-0 bg-gray-900/70" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -73,32 +76,66 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                <Dialog.Title as="h3" className="">
+              <div className="relative inline-block w-full max-w-3xl py-8 px-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Dialog.Title as="h3" className="sm:text-xl font-bold">
                   {link.id}
                 </Dialog.Title>
-                <div className="">
-                  <p>
-                    link: {process.env.NEXT_PUBLIC_URL}/{link.id}
-                  </p>
-                  {uses === null && <div>no uses</div>}
-                  {uses !== null && (
-                    <div>
-                      <h4>Used by</h4>
-                      {uses.map((use) => (
-                        <div key={use.user.githubUsername}>
-                          {use.user.githubUsername}
+                <div>
+                  <CopyButton
+                    text={`${process.env.NEXT_PUBLIC_URL}/share/${link.id}`}
+                  >
+                    <CopyButton.NotCopied>
+                      <div className="flex items-center gap-2">
+                        Copy Link <FiCopy className="w-4 h-4 text-gray-600" />
+                      </div>
+                    </CopyButton.NotCopied>
+                    <CopyButton.Copied>
+                      <div className="flex items-center gap-2">
+                        Copied <FiCheck className="w-4 h-4 text-green-600" />
+                      </div>
+                    </CopyButton.Copied>
+                  </CopyButton>
+                  <div className="mt-4">
+                    {uses === null && <>no uses</>}
+                    {uses !== null && (
+                      <>
+                        <h4 className="text-lg font-semibold">Used by</h4>
+                        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-6 mt-2">
+                          {uses.map((use) => (
+                            <a
+                              href={`https://github.com/${use.user.githubUsername}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="w-max group"
+                              key={use.user.githubUsername}
+                            >
+                              <div className="flex items-center gap-3 text-lg w-max">
+                                <div className="rounded-full overflow-hidden w-8 h-8">
+                                  <Image
+                                    width={32}
+                                    height={32}
+                                    src={`https://github.com/${use.user.githubUsername}.png`}
+                                  />
+                                </div>
+                                <div className="group-hover:underline text-blue-600 font-medium">
+                                  {use.user.githubUsername}
+                                </div>
+                              </div>
+                            </a>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </>
+                    )}
+                  </div>
                 </div>
 
-                <div className="">
-                  <button type="button" className="btn" onClick={closeModal}>
-                    Close
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="absolute top-4 right-4"
+                  onClick={closeModal}
+                >
+                  <FiX className="w-4 h-4" />
+                </button>
               </div>
             </Transition.Child>
           </div>
