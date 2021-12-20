@@ -76,7 +76,7 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-3xl py-8 px-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <div className="relative inline-block w-full max-w-3xl py-8 px-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-xl">
                 <Dialog.Title as="h3" className="sm:text-xl font-bold">
                   {link.id}
                 </Dialog.Title>
@@ -97,10 +97,15 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
                   </CopyButton>
                   <div className="mt-4">
                     {uses === null ? null : uses.length === 0 ? (
-                      <>no uses</>
+                      <>No one has used this link yet!</>
                     ) : (
                       <>
-                        <h4 className="text-lg font-semibold">Used by</h4>
+                        <h4 className="text-lg font-semibold">
+                          Used by
+                          <span className="font-normal text-base bg-gray-200 rounded-full px-2 py-0.5 ml-2">
+                            {uses.length}
+                          </span>
+                        </h4>
                         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-6 mt-2">
                           {uses.map((use) => (
                             <a

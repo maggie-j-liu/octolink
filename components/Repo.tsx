@@ -10,12 +10,12 @@ const Repo = ({
   createLink: (name: string, id: number) => {};
 }) => {
   return (
-    <div className="py-8 text-lg">
-      <h2>{repo.full_name}</h2>
+    <div className="py-8">
+      <h2 className="text-lg">{repo.full_name}</h2>
       {links[repo.id] && (
         <div className="my-3">
           <h3 className="text-xl">Share Links</h3>
-          <ul className="space-y-4">
+          <ul className="space-y-6 sm:space-y-4">
             {links[repo.id].map((link) => (
               <ShareLink key={link.id} link={link} />
             ))}
