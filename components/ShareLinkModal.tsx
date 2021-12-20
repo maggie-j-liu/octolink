@@ -96,8 +96,9 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
                     </CopyButton.Copied>
                   </CopyButton>
                   <div className="mt-4">
-                    {uses === null && <>no uses</>}
-                    {uses !== null && (
+                    {uses === null ? null : uses.length === 0 ? (
+                      <>no uses</>
+                    ) : (
                       <>
                         <h4 className="text-lg font-semibold">Used by</h4>
                         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-6 mt-2">
