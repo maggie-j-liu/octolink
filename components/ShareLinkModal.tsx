@@ -1,9 +1,10 @@
 import { Transition, Dialog } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Link as LinkType } from "../pages/dashboard";
 import Image from "next/image";
-import { FiCheck, FiCopy, FiX } from "react-icons/fi";
+import { HiCheck, HiOutlineClipboardCopy, HiX } from "react-icons/hi";
 import CopyButton from "./CopyButton";
+import { ModalContext } from "./ShareLink";
 
 interface Use {
   user: {
@@ -13,6 +14,8 @@ interface Use {
 
 const ShareLinkModal = ({ link }: { link: LinkType }) => {
   const [uses, setUses] = useState<Use[] | null>(null);
+  const { modalOpen, setModalOpen } = useContext(ModalContext);
+
   const getUses = async () => {
     const res = await fetch("/api/links/get-uses", {
       method: "POST",
@@ -23,25 +26,19 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
     const data = await res.json();
     setUses(data.uses);
   };
-  const [isOpen, setIsOpen] = useState(false);
-  const openModal = () => {
-    if (!uses) {
+
+  useEffect(() => {
+    if (modalOpen && !uses) {
       getUses();
     }
-    setIsOpen(true);
-  };
+  }, [modalOpen]);
+
   const closeModal = () => {
-    setIsOpen(false);
+    setModalOpen(false);
   };
   return (
     <>
-      <div className="">
-        <button type="button" onClick={openModal} className="btn">
-          View Details
-        </button>
-      </div>
-
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={modalOpen} as={Fragment}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
@@ -86,12 +83,13 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
                   >
                     <CopyButton.NotCopied>
                       <div className="flex items-center gap-2">
-                        Copy Link <FiCopy className="w-4 h-4 text-gray-600" />
+                        Copy Link{" "}
+                        <HiOutlineClipboardCopy className="w-5 h-5 text-gray-600" />
                       </div>
                     </CopyButton.NotCopied>
                     <CopyButton.Copied>
                       <div className="flex items-center gap-2">
-                        Copied <FiCheck className="w-4 h-4 text-green-600" />
+                        Copied <HiCheck className="w-5 h-5 text-green-600" />
                       </div>
                     </CopyButton.Copied>
                   </CopyButton>
@@ -140,7 +138,7 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
                   className="absolute top-4 right-4"
                   onClick={closeModal}
                 >
-                  <FiX className="w-4 h-4" />
+                  <HiX className="w-4 h-4" />
                 </button>
               </div>
             </Transition.Child>

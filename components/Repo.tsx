@@ -15,7 +15,7 @@ const Repo = ({
       {links[repo.id] && (
         <div className="my-3">
           <h3 className="text-xl">Share Links</h3>
-          <ul className="space-y-6 sm:space-y-4">
+          <ul className="divide-y bg-white rounded-md shadow overflow-hidden">
             {links[repo.id].map((link) => (
               <ShareLink key={link.id} link={link} />
             ))}
@@ -23,7 +23,7 @@ const Repo = ({
         </div>
       )}
       <button
-        className="btn"
+        className="white-btn"
         onClick={() => createLink(repo.full_name, repo.id)}
       >
         Create Link

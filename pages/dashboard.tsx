@@ -101,7 +101,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     return <NotSignedIn />;
   }
   return (
-    <main className="px-8 py-16">
+    <main className="px-8 py-16 bg-gray-200 min-h-screen">
       <h1 className="text-center text-4xl font-semibold">Dashboard</h1>
       <section className="max-w-4xl mx-auto mt-8">
         <h2 className="text-3xl font-medium">Your GitHub Repositories</h2>
@@ -114,7 +114,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
             </div>
           )}
           {!loading && (
-            <div className="divide-y-2 border-y-2">
+            <div className="divide-y-2 divide-gray-300 border-y-2">
               {repos.map((repo) => (
                 <Repo
                   key={repo.id}
@@ -128,7 +128,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
         </div>
         <div className="flex justify-center items-center gap-4">
           <button
-            className="btn"
+            className="white-btn"
             disabled={page === 1}
             onClick={() => {
               setLoading(true);
@@ -144,7 +144,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
           </button>
           <span>{page}</span>
           <button
-            className="btn"
+            className="white-btn"
             disabled={page === lastPage}
             onClick={() => {
               setLoading(true);

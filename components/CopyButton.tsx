@@ -15,7 +15,10 @@ const NotCopied = ({ children }: { children: ReactNode }) => {
   }
   return (
     <button
-      onClick={() => {
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
         navigator.clipboard.writeText(text);
         setCopied(true);
       }}
