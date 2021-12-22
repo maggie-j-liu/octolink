@@ -8,13 +8,20 @@ import {
   useState,
 } from "react";
 
-const NotCopied = ({ children }: { children: ReactNode }) => {
+const NotCopied = ({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
   const { text, copied, setCopied } = useContext(CopyContext);
   if (copied) {
     return null;
   }
   return (
     <button
+      className={className}
       type="button"
       onClick={(e) => {
         e.preventDefault();

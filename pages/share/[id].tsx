@@ -33,7 +33,7 @@ const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
         You have been invited to{" "}
         <a
           href={`https://github.com/${repoName}`}
-          className="hover:underline text-blue-600 font-bold"
+          className="hover:underline text-primary-600 font-bold"
         >
           {repoName}
         </a>

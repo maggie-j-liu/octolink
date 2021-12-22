@@ -121,7 +121,7 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
                                     src={`https://github.com/${use.user.githubUsername}.png`}
                                   />
                                 </div>
-                                <div className="group-hover:underline text-blue-600 font-medium">
+                                <div className="group-hover:underline text-primary-600 font-medium">
                                   {use.user.githubUsername}
                                 </div>
                               </div>

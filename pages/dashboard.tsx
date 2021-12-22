@@ -101,7 +101,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     return <NotSignedIn />;
   }
   return (
-    <main className="px-8 py-16 bg-gray-200 min-h-screen">
+    <main className="px-8 py-16 bg-gray-100 min-h-screen">
       <h1 className="text-center text-4xl font-semibold">Dashboard</h1>
       <section className="max-w-4xl mx-auto mt-8">
         <h2 className="text-3xl font-medium">Your GitHub Repositories</h2>
@@ -114,7 +114,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
             </div>
           )}
           {!loading && (
-            <div className="divide-y-2 divide-gray-300 border-y-2">
+            <div className="divide-y-2 divide-dashed divide-gray-300">
               {repos.map((repo) => (
                 <Repo
                   key={repo.id}
@@ -128,32 +128,49 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
         </div>
         <div className="flex justify-center items-center gap-4">
           <button
-            className="white-btn"
+            className="primary-btn"
             disabled={page === 1}
             onClick={() => {
               setLoading(true);
+              if (page !== 1) {
+                setPage(page - 1);
+                router.push("/dashboard?page=" + (page - 1), undefined, {
+                  shallow: true,
+                });
+              }
+              /*
               setPage((p) => {
                 if (p === 1) {
                   return 1;
                 }
                 return p - 1;
               });
+              */
             }}
           >
             previous
           </button>
           <span>{page}</span>
           <button
-            className="white-btn"
+            type="button"
+            className="primary-btn"
             disabled={page === lastPage}
             onClick={() => {
               setLoading(true);
+              if (page !== lastPage) {
+                setPage(page + 1);
+                router.push("/dashboard?page=" + (page + 1), undefined, {
+                  shallow: true,
+                });
+              }
+              /*
               setPage((p) => {
                 if (p === lastPage) {
                   return lastPage;
                 }
                 return p + 1;
               });
+              */
             }}
           >
             next

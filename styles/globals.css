@@ -4,10 +4,10 @@
 
 @layer utilities {
   .base-btn {
-    @apply disabled:opacity-60 disabled:cursor-not-allowed px-4 py-1.5 rounded-md;
+    @apply disabled:opacity-60 disabled:cursor-not-allowed px-4 py-1.5 rounded-md duration-200 hover:duration-100;
   }
-  .white-btn {
-    @apply base-btn bg-gray-50 hover:bg-white disabled:hover:bg-gray-50;
+  .primary-btn {
+    @apply base-btn text-white font-medium bg-primary-500 hover:bg-primary-600 disabled:hover:bg-primary-500;
   }
   .btn {
     @apply base-btn bg-gray-200 disabled:hover:bg-gray-200 hover:bg-gray-300 focus:bg-gray-300;

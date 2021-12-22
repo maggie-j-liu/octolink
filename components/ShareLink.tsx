@@ -19,17 +19,12 @@ export const ModalContext = createContext<{
 const ShareLink = ({ link }: { link: LinkType }) => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
-    <li>
-      <button
-        className="hover:bg-gray-50 w-full px-6 py-6 sm:py-4 flex items-center justify-between"
-        onClick={() => {
-          setModalOpen(true);
-        }}
-      >
+    <li className="hover:bg-gray-50 relative w-full px-6 py-6 sm:py-4">
+      <div className="relative flex items-center justify-between">
         <div className="flex flex-col items-start gap-2">
           <div className="flex items-center gap-2">
             <Link href={`/share/${link.id}`}>
-              <a className="text-blue-500">
+              <a className="text-primary-600 font-medium">
                 <span className="hidden md:inline">
                   {process.env.NEXT_PUBLIC_URL}/share/
                 </span>
@@ -42,7 +37,7 @@ const ShareLink = ({ link }: { link: LinkType }) => {
               <CopyButton.Copied>
                 <HiOutlineCheck className="w-5 h-5 text-green-600" />
               </CopyButton.Copied>
-              <CopyButton.NotCopied>
+              <CopyButton.NotCopied className="z-10">
                 <HiOutlineClipboardCopy className="w-5 h-5 text-gray-600" />
               </CopyButton.NotCopied>
             </CopyButton>
@@ -56,7 +51,13 @@ const ShareLink = ({ link }: { link: LinkType }) => {
         <div>
           <HiChevronDoubleRight className="w-4 h-4 text-gray-600" />
         </div>
-      </button>
+      </div>
+      <button
+        className="absolute inset-0 w-full h-full"
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      />
       <ModalContext.Provider value={{ modalOpen, setModalOpen }}>
         <ShareLinkModal link={link} />
       </ModalContext.Provider>
