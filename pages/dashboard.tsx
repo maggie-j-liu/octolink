@@ -101,7 +101,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     return <NotSignedIn />;
   }
   return (
-    <main className="px-8 py-16 bg-gray-100 min-h-screen">
+    <main className="px-8 pt-28 pb-16 bg-gray-100 min-h-screen">
       <h1 className="text-center text-4xl font-semibold">Dashboard</h1>
       <section className="max-w-4xl mx-auto mt-8">
         <h2 className="text-3xl font-medium">Your GitHub Repositories</h2>

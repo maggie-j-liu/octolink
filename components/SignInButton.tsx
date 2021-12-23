@@ -1,5 +1,16 @@
 import { signIn } from "next-auth/react";
-const SignInButton = () => {
-  return <button onClick={() => signIn("github")}>Sign in</button>;
+import { ReactNode } from "react";
+const SignInButton = ({
+  className = "",
+  children = "Sign In",
+}: {
+  className?: string;
+  children?: ReactNode;
+}) => {
+  return (
+    <button className={className} onClick={() => signIn("github")}>
+      {children}
+    </button>
+  );
 };
 export default SignInButton;
