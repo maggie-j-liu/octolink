@@ -1,9 +1,9 @@
-import { signIn } from "next-auth/react";
+import SignInButton from "./SignInButton";
 const NotSignedIn = () => {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn("github")}>Sign in</button>
+      <SignInButton />
     </>
   );
 };
