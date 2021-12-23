@@ -64,18 +64,20 @@ model VerificationToken {
 }
 
 model Link {
-  id       String @id @default(cuid())
-  userId   String
-  repoId   Int
-  repoName String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  uses     Use[]
+  id        String   @id @default(cuid())
+  userId    String
+  repoId    Int
+  repoName  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uses      Use[]
+  createdAt DateTime @default(now())
 }
 
 model Use {
-  id     String @id @default(cuid())
-  userId String
-  linkId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  link   Link   @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  userId    String
+  linkId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link      Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }

@@ -21,6 +21,11 @@ export default async function handler(
     return;
   }
   const links = await prisma.link.findMany({
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+    ],
     where: {
       userId: session.userId as string,
       repoId: {

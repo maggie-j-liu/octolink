@@ -39,7 +39,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     }).then((res) => res.json());
     const prev: typeof links = JSON.parse(JSON.stringify(links));
     if (prev[repoId]) {
-      prev[repoId].push(created);
+      prev[repoId] = [created, ...prev[repoId]];
     } else {
       prev[repoId] = [created];
     }

@@ -27,6 +27,11 @@ export default async function handler(
     },
     select: {
       uses: {
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
         select: {
           user: {
             select: {
