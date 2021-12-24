@@ -6,7 +6,7 @@ import SignInButton from "../components/SignInButton";
 export default function Component() {
   const { data: session, status } = useSession();
   return (
-    <main className="h-fu">
+    <main>
       <section className="container px-8 py-16 mx-auto min-h-screen flex flex-col items-center justify-center">
         <div className="relative">
           <div className="absolute -left-1 sm:-left-1.5 -right-1 sm:-right-1.5 bottom-0.5 sm:bottom-1.5 h-4 sm:h-6 bg-primary-200 rounded-md sm:rounded-lg" />

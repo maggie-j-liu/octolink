@@ -11,20 +11,32 @@ const Navbar = () => {
   const router = useRouter();
   return (
     <nav className="h-16 absolute top-0 px-8 w-full">
-      <div className="sm:text-lg h-full max-w-4xl mx-auto w-full flex items-center justify-between">
-        <div className="font-bold">
+      <div className="text-sm sm:text-lg h-full max-w-4xl mx-auto w-full flex items-center justify-between">
+        <div className="font-bold text-base sm:text-2xl">
           <Link href="/">
-            <a>Octolink</a>
+            <a className="relative">
+              <span
+                className="select-none text-primary-300 absolute translate-x-0.5 sm:translate-x-[0.1875rem] -translate-y-0.5 sm:-translate-y-[0.1875rem] font-medium"
+                aria-hidden="true"
+              >
+                o
+              </span>
+              <span className="relative">
+                <span className="font-medium text-primary-800">o</span>ctolink
+              </span>
+            </a>
           </Link>
         </div>
         <div className="flex items-center justify-end gap-6 sm:gap-10">
-          <Link href="/dashboard">
-            <a>Dashboard</a>
-          </Link>
+          {status === "authenticated" && (
+            <Link href="/dashboard">
+              <a>Dashboard</a>
+            </Link>
+          )}
           {status === "authenticated" ? (
             <>
-              <Menu as="div" className="relative w-9 h-9">
-                <Menu.Button className="w-full h-full">
+              <Menu as="div" className="relative w-10 h-10">
+                <Menu.Button className="flex items-center justify-center w-full h-full border-2 border-primary-400 rounded-full overflow-hidden">
                   <Image
                     width={36}
                     height={36}
@@ -42,7 +54,7 @@ const Navbar = () => {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Menu.Items className="text-base border border-gray-300 absolute right-0 w-max p-1 origin-top bg-white rounded-lg shadow-lg">
+                  <Menu.Items className="mt-2 text-base border border-gray-300 absolute right-0 w-max p-1 origin-top bg-white rounded-lg shadow-lg shadow-gray-100">
                     <Menu.Item as="div" className="px-4 py-1.5" disabled>
                       {session?.githubUsername as string}
                     </Menu.Item>
@@ -53,8 +65,9 @@ const Navbar = () => {
                             active ? "bg-gray-100" : ""
                           }`}
                           onClick={() => {
-                            signOut();
-                            router.push("/");
+                            signOut({
+                              callbackUrl: process.env.NEXT_PUBLIC_URL,
+                            });
                           }}
                         >
                           Sign out
