@@ -4,7 +4,7 @@ import NotSignedIn from "../components/NotSignedIn";
 import SignInButton from "../components/SignInButton";
 
 export default function Component() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   return (
     <main>
       <section className="container px-8 py-16 mx-auto min-h-screen flex flex-col items-center justify-center">
@@ -19,10 +19,10 @@ export default function Component() {
         </h2>
         <div className="mt-4">
           {status === "loading" ? (
-            <div className="w-24 h-11 cta-btn"></div>
+            <div className="cta-btn">Get Started</div>
           ) : status === "unauthenticated" ? (
             <>
-              <SignInButton className="cta-btn" />
+              <SignInButton className="cta-btn">Get Started</SignInButton>
             </>
           ) : (
             <Link href="/dashboard">

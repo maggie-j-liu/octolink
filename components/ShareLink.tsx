@@ -20,27 +20,29 @@ const ShareLink = ({ link }: { link: LinkType }) => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <li className="hover:bg-gray-50 relative w-full px-6 py-6 sm:py-4">
-      <div className="relative flex items-center justify-between">
-        <div className="flex flex-col items-start gap-2">
-          <div className="flex items-center gap-2">
+      <div className="relative flex items-center justify-between gap-2">
+        <div className="min-w-0 flex flex-col gap-2">
+          <div className="min-w-0 flex items-center gap-0.5 sm:gap-2">
             <Link href={`/share/${link.id}`}>
-              <a className="text-primary-600 font-medium">
+              <a className="order-2 sm:order-1 text-primary-600 font-medium truncate min-w-0">
                 <span className="hidden md:inline">
                   {process.env.NEXT_PUBLIC_URL}/share/
                 </span>
                 {link.id}
               </a>
             </Link>
-            <CopyButton
-              text={`${process.env.NEXT_PUBLIC_URL}/share/${link.id}`}
-            >
-              <CopyButton.Copied>
-                <HiOutlineCheck className="w-5 h-5 text-green-600" />
-              </CopyButton.Copied>
-              <CopyButton.NotCopied className="z-10">
-                <HiOutlineClipboardCopy className="w-5 h-5 text-gray-600" />
-              </CopyButton.NotCopied>
-            </CopyButton>
+            <div className="flex flex-shrink-0 order-1 sm:order-2">
+              <CopyButton
+                text={`${process.env.NEXT_PUBLIC_URL}/share/${link.id}`}
+              >
+                <CopyButton.Copied>
+                  <HiOutlineCheck className="w-5 h-5 text-green-600" />
+                </CopyButton.Copied>
+                <CopyButton.NotCopied className="z-10">
+                  <HiOutlineClipboardCopy className="w-5 h-5 text-gray-600" />
+                </CopyButton.NotCopied>
+              </CopyButton>
+            </div>
           </div>
           <div className="text-sm text-gray-500">
             <div>
@@ -48,7 +50,7 @@ const ShareLink = ({ link }: { link: LinkType }) => {
             </div>
           </div>
         </div>
-        <div>
+        <div className="flex-shrink-0">
           <HiChevronDoubleRight className="w-4 h-4 text-gray-600" />
         </div>
       </div>

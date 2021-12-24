@@ -28,13 +28,17 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex items-center justify-end gap-6 sm:gap-10">
-          {status === "authenticated" && (
-            <Link href="/dashboard">
-              <a>Dashboard</a>
-            </Link>
-          )}
-          {status === "authenticated" ? (
+          {status === "loading" ? null : status === "authenticated" ? (
             <>
+              <div className="group relative">
+                <div className="absolute -left-0.5 -right-0.5 bottom-0.5 sm:bottom-1.5 h-1">
+                  <div className="w-0 group-hover:w-full duration-500 h-full bg-primary-200 rounded-md sm:rounded-lg" />
+                </div>
+
+                <Link href="/dashboard">
+                  <a className="relative">Dashboard</a>
+                </Link>
+              </div>
               <Menu as="div" className="relative w-10 h-10">
                 <Menu.Button className="flex items-center justify-center w-full h-full border-2 border-primary-400 rounded-full overflow-hidden">
                   <Image

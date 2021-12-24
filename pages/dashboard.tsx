@@ -102,10 +102,15 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
   }
   return (
     <main className="px-8 pt-28 pb-16 bg-gray-100 min-h-screen">
-      <h1 className="text-center text-4xl font-semibold">Dashboard</h1>
+      <div className="relative w-max mx-auto">
+        <div className="absolute -left-0.5 -right-0.5 bottom-1 h-2 bg-primary-200 rounded-md sm:rounded-lg" />
+        <h1 className="relative text-center text-4xl font-semibold">
+          Dashboard
+        </h1>
+      </div>
       <section className="max-w-4xl mx-auto mt-8">
         <h2 className="text-3xl font-medium">Your GitHub Repositories</h2>
-        <div className="my-8">
+        <div className="mb-8">
           {loading && (
             <div className="space-y-8 py-8">
               {[...Array(3)].map((_, i) => (
@@ -138,14 +143,6 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
                   shallow: true,
                 });
               }
-              /*
-              setPage((p) => {
-                if (p === 1) {
-                  return 1;
-                }
-                return p - 1;
-              });
-              */
             }}
           >
             previous
@@ -163,14 +160,6 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
                   shallow: true,
                 });
               }
-              /*
-              setPage((p) => {
-                if (p === lastPage) {
-                  return lastPage;
-                }
-                return p + 1;
-              });
-              */
             }}
           >
             next
