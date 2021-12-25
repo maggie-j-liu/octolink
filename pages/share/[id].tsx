@@ -73,13 +73,6 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
 }) => {
   const session = await getSession({ req });
-  if (!session) {
-    return {
-      props: {
-        session,
-      },
-    };
-  }
   if (!params || !params.id) {
     return {
       notFound: true,
