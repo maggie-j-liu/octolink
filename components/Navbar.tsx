@@ -4,7 +4,6 @@ import { useSession, signOut } from "next-auth/react";
 import SignInButton from "./SignInButton";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { data: session, status } = useSession();

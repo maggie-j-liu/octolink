@@ -17,6 +17,7 @@
     "autoprefixer": "^10.4.0",
     "next": "12.0.7",
     "next-auth": "^4.0.2",
+    "next-seo": "^4.28.1",
     "parse-link-header": "^1.0.1",
     "postcss": "^8.4.5",
     "react": "17.0.2",

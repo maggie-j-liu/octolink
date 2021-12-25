@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
+import { NextSeo } from "next-seo";
 import { useState } from "react";
 import NotSignedIn from "../../components/NotSignedIn";
 import prisma from "../../lib/prisma";
@@ -28,24 +29,33 @@ const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
     return <NotSignedIn />;
   }
   return (
-    <main className="px-8 py-16 min-h-screen flex flex-col items-center justify-center gap-6">
-      <h1 className="text-4xl">
-        You have been invited to{" "}
-        <a
-          href={`https://github.com/${repoName}`}
-          className="hover:underline text-primary-600 font-bold"
+    <>
+      <NextSeo
+        title={`Invitation to ${repoName}`}
+        description={`You have been invited to ${repoName}. Accept the invite to be added as a collaborator to this repository.`}
+        openGraph={{
+          url: `${process.env.NEXT_PUBLIC_URL}/share/${id}`,
+        }}
+      />
+      <main className="px-8 py-16 min-h-screen flex flex-col items-center justify-center gap-6">
+        <h1 className="text-4xl">
+          You have been invited to{" "}
+          <a
+            href={`https://github.com/${repoName}`}
+            className="hover:underline text-primary-600 font-bold"
+          >
+            {repoName}
+          </a>
+        </h1>
+        <button
+          className="text-lg btn"
+          disabled={loading}
+          onClick={() => sendInvite()}
         >
-          {repoName}
-        </a>
-      </h1>
-      <button
-        className="text-lg btn"
-        disabled={loading}
-        onClick={() => sendInvite()}
-      >
-        {loading ? "Accepting..." : "Accept Invite"}
-      </button>
-    </main>
+          {loading ? "Accepting..." : "Accept Invite"}
+        </button>
+      </main>
+    </>
   );
 };
 export default LinkPage;

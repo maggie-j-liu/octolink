@@ -6,6 +6,7 @@ import LoadingSkeleton from "../components/LoadingSkeleton";
 import Repo from "../components/Repo";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 
 export interface RepoType {
   id: number;
@@ -85,8 +86,8 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
               linkMap[link.repoId] = [link];
             }
           }
-          console.log("links", links);
-          console.log("linkmap", linkMap);
+          // console.log("links", links);
+          // console.log("linkmap", linkMap);
           setLinks((prev) => ({ ...prev, ...linkMap }));
         }
 
@@ -101,72 +102,81 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     return <NotSignedIn />;
   }
   return (
-    <main className="px-8 pt-28 pb-16 bg-gray-100 min-h-screen">
-      <div className="relative w-max mx-auto">
-        <div className="absolute -left-0.5 -right-0.5 bottom-1 h-2 bg-primary-200 rounded-md sm:rounded-lg" />
-        <h1 className="relative text-center text-4xl font-semibold">
-          Dashboard
-        </h1>
-      </div>
-      <section className="max-w-4xl mx-auto mt-8">
-        <h2 className="text-3xl font-medium">Your GitHub Repositories</h2>
-        <div className="mb-8">
-          {loading && (
-            <div className="space-y-8 py-8">
-              {[...Array(3)].map((_, i) => (
-                <LoadingSkeleton className="w-full h-12" key={i} />
-              ))}
-            </div>
-          )}
-          {!loading && (
-            <div className="divide-y-2 divide-dashed divide-gray-300">
-              {repos.map((repo) => (
-                <Repo
-                  key={repo.id}
-                  repo={repo}
-                  links={links}
-                  createLink={createLink}
-                />
-              ))}
-            </div>
-          )}
+    <>
+      <NextSeo
+        title="Dashboard"
+        description="Create links to invite others to collaborate on your repositories."
+        openGraph={{
+          url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
+        }}
+      />
+      <main className="px-8 pt-28 pb-16 bg-gray-100 min-h-screen">
+        <div className="relative w-max mx-auto">
+          <div className="absolute -left-0.5 -right-0.5 bottom-1 h-2 bg-primary-200 rounded-md sm:rounded-lg" />
+          <h1 className="relative text-center text-4xl font-semibold">
+            Dashboard
+          </h1>
         </div>
-        <div className="flex justify-center items-center gap-4">
-          <button
-            className="primary-btn"
-            disabled={page === 1}
-            onClick={() => {
-              setLoading(true);
-              if (page !== 1) {
-                setPage(page - 1);
-                router.push("/dashboard?page=" + (page - 1), undefined, {
-                  shallow: true,
-                });
-              }
-            }}
-          >
-            previous
-          </button>
-          <span>{page}</span>
-          <button
-            type="button"
-            className="primary-btn"
-            disabled={page === lastPage}
-            onClick={() => {
-              setLoading(true);
-              if (page !== lastPage) {
-                setPage(page + 1);
-                router.push("/dashboard?page=" + (page + 1), undefined, {
-                  shallow: true,
-                });
-              }
-            }}
-          >
-            next
-          </button>
-        </div>
-      </section>
-    </main>
+        <section className="max-w-4xl mx-auto mt-8">
+          <h2 className="text-3xl font-medium">Your GitHub Repositories</h2>
+          <div className="mb-8">
+            {loading && (
+              <div className="space-y-8 py-8">
+                {[...Array(3)].map((_, i) => (
+                  <LoadingSkeleton className="w-full h-12" key={i} />
+                ))}
+              </div>
+            )}
+            {!loading && (
+              <div className="divide-y-2 divide-dashed divide-gray-300">
+                {repos.map((repo) => (
+                  <Repo
+                    key={repo.id}
+                    repo={repo}
+                    links={links}
+                    createLink={createLink}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="flex justify-center items-center gap-4">
+            <button
+              className="primary-btn"
+              disabled={page === 1}
+              onClick={() => {
+                setLoading(true);
+                if (page !== 1) {
+                  setPage(page - 1);
+                  router.push("/dashboard?page=" + (page - 1), undefined, {
+                    shallow: true,
+                  });
+                }
+              }}
+            >
+              previous
+            </button>
+            <span>{page}</span>
+            <button
+              type="button"
+              className="primary-btn"
+              disabled={page === lastPage}
+              onClick={() => {
+                setLoading(true);
+                if (page !== lastPage) {
+                  setPage(page + 1);
+                  router.push("/dashboard?page=" + (page + 1), undefined, {
+                    shallow: true,
+                  });
+                }
+              }}
+            >
+              next
+            </button>
+          </div>
+        </section>
+      </main>
+    </>
   );
 };
 
