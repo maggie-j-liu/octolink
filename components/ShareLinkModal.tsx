@@ -73,22 +73,25 @@ const ShareLinkModal = ({ link }: { link: LinkType }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-3xl py-8 px-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-xl">
-                <Dialog.Title as="h3" className="sm:text-xl font-bold">
+              <div className="relative inline-block w-full max-w-3xl py-8 px-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg border-2 border-gray-300">
+                <Dialog.Title
+                  as="h3"
+                  className="sm:text-xl font-semibold break-all"
+                >
                   {link.id}
                 </Dialog.Title>
                 <div>
                   <CopyButton
                     text={`${process.env.NEXT_PUBLIC_URL}/share/${link.id}`}
                   >
-                    <CopyButton.NotCopied>
+                    <CopyButton.NotCopied className="hover:bg-primary-50 px-2 -mx-2 py-1 rounded-md">
                       <div className="flex items-center gap-2">
                         Copy Link{" "}
                         <HiOutlineClipboardCopy className="w-5 h-5 text-gray-600" />
                       </div>
                     </CopyButton.NotCopied>
                     <CopyButton.Copied>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 py-1">
                         Copied <HiCheck className="w-5 h-5 text-green-600" />
                       </div>
                     </CopyButton.Copied>

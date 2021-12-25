@@ -8,11 +8,13 @@ import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
-  const router = useRouter();
   return (
     <nav className="h-16 absolute top-0 px-8 w-full">
       <div className="text-sm sm:text-lg h-full max-w-4xl mx-auto w-full flex items-center justify-between">
-        <div className="font-bold text-base sm:text-2xl">
+        <div className="font-bold text-base sm:text-2xl group relative">
+          <div className="absolute left-0 right-0 bottom-1 sm:bottom-1.5 h-1">
+            <div className="animated-underline duration-500 bg-primary-200" />
+          </div>
           <Link href="/">
             <a className="relative">
               <span
@@ -31,8 +33,8 @@ const Navbar = () => {
           {status === "loading" ? null : status === "authenticated" ? (
             <>
               <div className="group relative">
-                <div className="absolute -left-0.5 -right-0.5 bottom-0.5 sm:bottom-1.5 h-1">
-                  <div className="w-0 group-hover:w-full duration-500 h-full bg-primary-200 rounded-md sm:rounded-lg" />
+                <div className="absolute left-0 right-0 bottom-1 sm:bottom-1.5 h-1">
+                  <div className="animated-underline duration-500 bg-primary-200" />
                 </div>
 
                 <Link href="/dashboard">
