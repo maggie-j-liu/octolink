@@ -53,6 +53,7 @@ model User {
   sessions       Session[]
   links          Link[]
   uses           Use[]
+  createdAt      DateTime  @default(now())
 }
 
 model VerificationToken {
