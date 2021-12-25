@@ -6,6 +6,15 @@ import NotSignedIn from "../../components/NotSignedIn";
 import prisma from "../../lib/prisma";
 
 const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
+  const SEO = () => (
+    <NextSeo
+      title={`Invitation to ${repoName}`}
+      description={`You have been invited to ${repoName}. Accept the invite to be added as a collaborator to this repository.`}
+      openGraph={{
+        url: `${process.env.NEXT_PUBLIC_URL}/share/${id}`,
+      }}
+    />
+  );
   const { status } = useSession();
   const [loading, setLoading] = useState(false);
   const sendInvite = async () => {
@@ -26,17 +35,16 @@ const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
     setLoading(false);
   };
   if (status === "unauthenticated") {
-    return <NotSignedIn />;
+    return (
+      <>
+        <SEO />
+        <NotSignedIn />
+      </>
+    );
   }
   return (
     <>
-      <NextSeo
-        title={`Invitation to ${repoName}`}
-        description={`You have been invited to ${repoName}. Accept the invite to be added as a collaborator to this repository.`}
-        openGraph={{
-          url: `${process.env.NEXT_PUBLIC_URL}/share/${id}`,
-        }}
-      />
+      <SEO />
       <main className="px-8 py-16 min-h-screen flex flex-col items-center justify-center gap-6">
         <h1 className="text-4xl">
           You have been invited to{" "}

@@ -22,6 +22,16 @@ export interface Link {
 export interface RepoLinks {
   [key: string]: Link[];
 }
+
+const SEO = () => (
+  <NextSeo
+    title="Dashboard"
+    description="Create links to invite others to collaborate on your repositories."
+    openGraph={{
+      url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
+    }}
+  />
+);
 const Dashboard = ({ page: initialPage }: { page: number }) => {
   const { status } = useSession();
   const [loading, setLoading] = useState(true);
@@ -99,17 +109,16 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     return null;
   }
   if (status === "unauthenticated") {
-    return <NotSignedIn />;
+    return (
+      <>
+        <SEO />
+        <NotSignedIn />
+      </>
+    );
   }
   return (
     <>
-      <NextSeo
-        title="Dashboard"
-        description="Create links to invite others to collaborate on your repositories."
-        openGraph={{
-          url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
-        }}
-      />
+      <SEO />
       <main className="px-8 pt-28 pb-16 bg-gray-100 min-h-screen">
         <div className="relative w-max mx-auto">
           <div className="absolute -left-0.5 -right-0.5 bottom-1 h-2 bg-primary-200 rounded-md sm:rounded-lg" />
