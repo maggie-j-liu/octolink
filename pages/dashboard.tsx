@@ -106,7 +106,7 @@ const Dashboard = ({ page: initialPage }: { page: number }) => {
     }
   }, [status, page]);
   if (status === "loading") {
-    return null;
+    return <SEO />;
   }
   if (status === "unauthenticated") {
     return (
