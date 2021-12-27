@@ -26,7 +26,7 @@ export interface RepoLinks {
 const SEO = () => (
   <NextSeo
     title="Dashboard"
-    description="Create links to invite others to collaborate on your repositories."
+    description="Create and manage links to invite others to collaborate on your repositories."
     openGraph={{
       url: `${process.env.NEXT_PUBLIC_URL}/dashboard`,
     }}

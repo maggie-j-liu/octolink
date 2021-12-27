@@ -24,7 +24,11 @@ const ShareLink = ({ link }: { link: LinkType }) => {
         <div className="min-w-0 flex flex-col gap-2">
           <div className="min-w-0 flex items-center gap-0.5 sm:gap-2">
             <Link href={`/share/${link.id}`}>
-              <a className="order-2 sm:order-1 text-primary-600 font-medium truncate min-w-0">
+              <a
+                className="order-2 sm:order-1 text-primary-600 hover:text-primary-700 font-medium truncate min-w-0 z-10"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="hidden md:inline">
                   {process.env.NEXT_PUBLIC_URL}/share/
                 </span>
