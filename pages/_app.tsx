@@ -16,6 +16,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         }}
         openGraph={{
           url: `${process.env.NEXT_PUBLIC_URL}`,
+          images: [
+            {
+              url: "/og-image.png",
+              width: 1200,
+              height: 630,
+              alt: "Octolink | Link sharing for GitHub repositories",
+            },
+          ],
         }}
       />
       <Navbar />
