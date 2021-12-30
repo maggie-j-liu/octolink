@@ -44,6 +44,6 @@ export default async function handler(
       },
     },
   });
-  console.log("get", links);
+  // console.log("get", links);
   res.status(200).json(links);
 }
