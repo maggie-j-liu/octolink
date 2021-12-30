@@ -72,6 +72,7 @@ model Link {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   uses      Use[]
   createdAt DateTime @default(now())
+  revoked   Boolean  @default(false)
 }
 
 model Use {

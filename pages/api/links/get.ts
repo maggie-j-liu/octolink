@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
+import { Link } from "../../dashboard";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +21,7 @@ export default async function handler(
     res.status(400).json({ error: "Missing repoIds" });
     return;
   }
-  const links = await prisma.link.findMany({
+  const links: Link[] = await prisma.link.findMany({
     orderBy: [
       {
         createdAt: "desc",
@@ -32,7 +33,10 @@ export default async function handler(
         in: body.repoIds,
       },
     },
-    include: {
+    select: {
+      id: true,
+      repoId: true,
+      revoked: true,
       _count: {
         select: {
           uses: true,
@@ -40,6 +44,6 @@ export default async function handler(
       },
     },
   });
-  // console.log("get", links);
+  console.log("get", links);
   res.status(200).json(links);
 }

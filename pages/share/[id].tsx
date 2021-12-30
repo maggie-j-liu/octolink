@@ -84,9 +84,10 @@ export const getServerSideProps: GetServerSideProps = async ({
     },
     select: {
       repoName: true,
+      revoked: true,
     },
   });
-  if (!link) {
+  if (!link || link.revoked) {
     return {
       notFound: true,
     };
