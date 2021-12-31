@@ -4,29 +4,42 @@ import { useSession, signOut } from "next-auth/react";
 import SignInButton from "./SignInButton";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { SiGithub } from "react-icons/si";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
   return (
     <nav className="h-16 absolute top-0 px-8 w-full">
       <div className="text-sm sm:text-lg h-full max-w-4xl mx-auto w-full flex items-center justify-between">
-        <div className="font-bold text-base sm:text-2xl group relative">
-          <div className="absolute left-0 right-0 bottom-1 sm:bottom-1.5 h-1">
-            <div className="animated-underline duration-500 bg-primary-200" />
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="font-bold text-base sm:text-2xl group relative">
+            <div className="absolute left-0 right-0 bottom-1 sm:bottom-1.5 h-1">
+              <div className="animated-underline duration-500 bg-primary-200" />
+            </div>
+            <Link href="/">
+              <a className="relative">
+                <span
+                  className="select-none text-primary-300 absolute translate-x-0.5 sm:translate-x-[0.1875rem] -translate-y-0.5 sm:-translate-y-[0.1875rem] font-medium"
+                  aria-hidden="true"
+                >
+                  o
+                </span>
+                <span className="relative">
+                  <span className="font-medium text-primary-800">o</span>ctolink
+                </span>
+              </a>
+            </Link>
           </div>
-          <Link href="/">
-            <a className="relative">
-              <span
-                className="select-none text-primary-300 absolute translate-x-0.5 sm:translate-x-[0.1875rem] -translate-y-0.5 sm:-translate-y-[0.1875rem] font-medium"
-                aria-hidden="true"
-              >
-                o
-              </span>
-              <span className="relative">
-                <span className="font-medium text-primary-800">o</span>ctolink
-              </span>
+          <div>
+            <a
+              href="https://github.com/maggie-j-liu/octolink"
+              target="_blank"
+              rel="noreferrer"
+              className="text-opacity-60 hover:text-opacity-100 text-gray-900"
+            >
+              <SiGithub className="w-4 sm:w-5 h-4 sm:h-5" />
             </a>
-          </Link>
+          </div>
         </div>
         <div className="flex items-center justify-end gap-6 sm:gap-10">
           {status === "loading" ? null : status === "authenticated" ? (
