@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { NextSeo } from "next-seo";
 import { useState } from "react";
-import NotSignedIn from "../../components/NotSignedIn";
+import SignInButton from "../../components/SignInButton";
 import prisma from "../../lib/prisma";
 
 const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
@@ -34,19 +34,11 @@ const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
     window.location.href = `https://github.com/${repoName}`;
     setLoading(false);
   };
-  if (status === "unauthenticated") {
-    return (
-      <>
-        <SEO />
-        <NotSignedIn />
-      </>
-    );
-  }
   return (
     <>
       <SEO />
       <main className="px-8 py-16 min-h-screen flex flex-col items-center justify-center gap-6">
-        <h1 className="text-4xl">
+        <h1 className="text-4xl text-center">
           You have been invited to{" "}
           <a
             href={`https://github.com/${repoName}`}
@@ -55,13 +47,19 @@ const LinkPage = ({ repoName, id }: { repoName: string; id: string }) => {
             {repoName}
           </a>
         </h1>
-        <button
-          className="text-lg btn"
-          disabled={loading}
-          onClick={() => sendInvite()}
-        >
-          {loading ? "Accepting..." : "Accept Invite"}
-        </button>
+        {status === "authenticated" ? (
+          <button
+            className="text-lg btn"
+            disabled={loading}
+            onClick={() => sendInvite()}
+          >
+            {loading ? "Accepting..." : "Accept Invite"}
+          </button>
+        ) : (
+          <div>
+            <SignInButton className="text-lg btn" /> to accept the invite.
+          </div>
+        )}
       </main>
     </>
   );
