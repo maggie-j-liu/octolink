@@ -49,7 +49,7 @@ export default function Component() {
                 <p>Sign in, then create a link in your dashboard.</p>
               </div>
               <div className="order-2">
-                <Image src={step1} />
+                <Image placeholder="blur" src={step1} />
               </div>
               <div className="order-3 md:order-4 px-6 md:px-0">
                 <h2 className="text-2xl font-semibold">Step 2</h2>
@@ -59,7 +59,7 @@ export default function Component() {
                 </p>
               </div>
               <div className="order-4 md:order-3">
-                <Image src={step2} />
+                <Image placeholder="blur" src={step2} />
               </div>
 
               <div className="md:text-right order-5 px-6 md:px-0">
@@ -70,7 +70,7 @@ export default function Component() {
                 </p>
               </div>
               <div className="order-6">
-                <Image src={step3} />
+                <Image placeholder="blur" src={step3} />
               </div>
             </div>
           </div>
